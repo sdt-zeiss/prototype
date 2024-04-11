@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: zeiss-zkm-prototype
+    runtime: node
+    buildCommand: pnpm install --filter web && pnpm run build --filter web
+    startCommand: pnpm run start --filter web
+databases:
+  - name: zeiss-zkm-prototype
+    region: frankfurt
+    plan: standard
+    databaseName: prototype
+    postgresMajorVersion: 15
