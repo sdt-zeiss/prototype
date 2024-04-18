@@ -18,7 +18,8 @@
       "cache": false
     },
     "db:push": {
-      "cache": false
+      "cache": false,
+      "dotEnv": [".env.local"]
     },
     "db:seed": {
       "cache": false
@@ -27,5 +28,5 @@
       "dependsOn": ["^build", "^db:generate"]
     }
   },
-  "globalEnv": ["DATABASE_URL", "OPENWEATHERMAP_API_KEY"]
+  "globalEnv": ["DATABASE_URL", "AUTH_SECRET"]
 }
