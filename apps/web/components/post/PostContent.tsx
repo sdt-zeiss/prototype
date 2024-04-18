@@ -3,21 +3,17 @@ import { Post } from "@/app/home/page";
 export default function PostContent({ post }: { post: Post }) {
   return (
     <div className="flex flex-col gap-y-2">
-        <span className="text-2xl w-3/4">
-            {post.title}
-          </span>
-      <span className="bg-white text-black text-base rounded-full px-3 py-1 w-min">
-            {post.type}
-          </span>
-      <span className="text-sm font-normal">
-            {post.content}
-          </span>
+      <span className="w-3/4 text-2xl">{post.title}</span>
+      <span className="w-min rounded-full bg-white px-3 py-1 text-base text-black">
+        {post.type}
+      </span>
+      <span className="text-sm font-normal">{post.content}</span>
       <div className="flex flex-row justify-between">
         <div>
-          <span className="font-normal text-base">by </span>
-          <span className="font-bold text-base">{post.author}</span>
+          <span className="text-base font-normal">by </span>
+          <span className="text-base font-bold">{post.author}</span>
         </div>
-        <div className="font-normal text-base">
+        <div className="text-base font-normal">
           <span>{post.likes} Likes</span>
           <span className="mx-2">•</span>
           <span>{post.comments.length} Comments</span>

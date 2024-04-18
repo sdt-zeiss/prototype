@@ -43,22 +43,19 @@ pnpm run dev db:generate --filter database # Generate the Prisma client
 
 ## Deployment
 
-Both the web app and database are currently deployed on render.com. If you decide to deploy, you can use the IaC blueprint in `render.yaml` to deploy everything with a single click:
+The web app is deployed on sliplane.io using Docker. You can run the following command to build the Docker image:
 
-```yaml
-services:
-  - type: web
-    name: zeiss-zkm-prototype
-    runtime: node
-    buildCommand: pnpm install --filter web && pnpm run build --filter web
-    startCommand: pnpm run start --filter web
-databases:
-  - name: zeiss-zkm-prototype
-    region: frankfurt
-    plan: standard
-    databaseName: prototype
-    postgresMajorVersion: 15
+```bash
+docker build -t prototype -f ./apps/web/Dockerfile .
 ```
+
+You can then run the following command to run the Docker image:
+
+```bash
+docker run -p 3000:3000 prototype
+```
+
+To deploy, simply push to the main branch. The app will be automatically deployed and available at [https://prototype.sliplane.app](https://prototype.sliplane.app).
 
 ## Architecture
 

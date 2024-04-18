@@ -1,8 +1,7 @@
 export default function Button({ children, onClick }) {
-
   return (
     <button
-      className="h-8 bg-blue-700 hover:bg-blue-700 text-white rounded flex items-center justify-center px-3"
+      className="flex h-8 items-center justify-center rounded bg-blue-700 px-3 text-white hover:bg-blue-700"
       onClick={onClick}
     >
       {children}
