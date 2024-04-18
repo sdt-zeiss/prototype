@@ -19,6 +19,7 @@ WORKDIR /app
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/.env .env
 COPY --from=builder /app/out/pnpm-lock.yaml ./package-lock.json
 RUN pnpm install
 
@@ -39,6 +40,7 @@ COPY --from=installer /app/apps/web/package.json .
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=installer --chown=nextjs:nodejs /app/.env .env
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
