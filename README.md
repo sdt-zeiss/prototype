@@ -26,9 +26,26 @@ You will then have to create an `.env.local` file in `/apps/web/` and add the fo
 
 ```bash
 DATABASE_URL=...
+AUTH_SECRET=
 ```
 
-Do the same in `/packages/database/`.
+`AUTH_SECRET` can be any random string. If you are on a unix (macOS, Linux) system, you can run the following command to generate a random string:
+
+```bash
+openssl rand -base64 32
+```
+
+If you are on Windows, you can use the following command (untested)
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+```
+
+`DATABASE_URL` should be the URL to your PostgreSQL database. If you want to use the hosted database, please ping me (Jonas S.) on Slack
+
+Then also create a `.env` file in `/packages/database/prisma` and copy the `DATABASE_URL` from the `.env.local` file.
+
+If you are bored you can figure out how to reduce the number of `.env` files:D
 
 ### Commands
 
