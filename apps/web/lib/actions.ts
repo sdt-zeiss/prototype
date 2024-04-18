@@ -7,7 +7,7 @@ import { z } from "zod";
 export async function submitAuthForm(data: z.infer<typeof authSchema>) {
   const user = await signIn("credentials", {
     ...data,
-    redirectTo: "/dashboard",
+    redirectTo: `/dashboard?onboarding=${data.signup}`,
   });
 
   if (!user) {
