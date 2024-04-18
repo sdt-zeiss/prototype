@@ -5,7 +5,7 @@
     "build": {
       "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "dotEnv": [".env.local"]
+      "dotEnv": [".env.local", ".env"]
     },
     "lint": {},
     "dev": {
