@@ -4,7 +4,7 @@ import { saltAndHashPassword } from "@/utils/password";
 import { createUser, verifyAndGetUser } from "./utils/users";
 import { authSchema } from "./lib/zod";
 
-export const { handlers, auth, signIn } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       credentials: {

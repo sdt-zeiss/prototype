@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { authSchema } from "./zod";
 import { z } from "zod";
 
@@ -15,4 +15,8 @@ export async function submitAuthForm(data: z.infer<typeof authSchema>) {
   }
 
   return user;
+}
+
+export async function signOutAndRedirect() {
+  await signOut({ redirectTo: "/auth/signin" });
 }
