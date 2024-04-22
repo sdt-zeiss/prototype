@@ -3,8 +3,8 @@ import { Post } from "@/app/home/page";
 export default function PostContent({ post }: { post: Post }) {
   return (
     <div className="flex flex-col gap-y-2">
-      <span className="w-3/4 text-2xl">{post.title}</span>
-      <span className="w-min rounded-full bg-white px-3 py-1 text-base text-black">
+      <span className="w-3/4 text-2xl font-bold">{post.title}</span>
+      <span className="bg-primary text-primary-foreground w-min rounded-full px-3 py-1 text-base">
         {post.type}
       </span>
       <span className="text-sm font-normal">{post.content}</span>

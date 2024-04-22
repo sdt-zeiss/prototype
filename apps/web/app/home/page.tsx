@@ -1,10 +1,9 @@
 "use client";
 
-import NavigationBar from "@/components/NavigationBar";
-import TitleBar from "@/components/TitleBar";
-import PostCard from "@/components/post/PostCard";
-import PostModal from "@/components/post/PostModal";
+import PostCard from "@/components/post/post-card";
+import PostDialog from "@/components/post/post-dialog";
 import { useState } from "react";
+import { Dialog } from "@ui/components/dialog";
 
 export type Comment = {
   content: string;
@@ -178,21 +177,21 @@ export default function Page() {
   ];
 
   return (
-    <div className="flex h-screen flex-col items-center text-2xl font-bold">
-      <NavigationBar />
-      <TitleBar title="How to make decisions in an uncertain environment?" />
-      <div className="mt-2 flex flex-col items-center gap-y-2">
-        {posts.map((post) => (
-          <PostCard
-            key={post.author + post.title}
-            post={post}
-            onClick={() => setOpenedPost(post)}
-          />
-        ))}
-      </div>
-      {openedPost && (
-        <PostModal post={openedPost} onClose={() => setOpenedPost(null)} />
-      )}
+    <div className="flex items-center text-2xl font-bold">
+      <Dialog>
+        <div className="mt-2 flex flex-col items-center gap-y-2">
+          {posts.map((post) => (
+            <PostCard
+              key={post.author + post.title}
+              post={post}
+              onClick={() => setOpenedPost(post)}
+            />
+          ))}
+        </div>
+        {openedPost && (
+          <PostDialog post={openedPost} onClose={() => setOpenedPost(null)} />
+        )}
+      </Dialog>
     </div>
   );
 }
