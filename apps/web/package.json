@@ -16,6 +16,7 @@
     "clsx": "^1.2.1",
     "database": "workspace:*",
     "date-fns": "^3.6.0",
+    "framer-motion": "^11.1.7",
     "lucide-react": "^0.372.0",
     "next": "^13.4.1",
     "next-auth": "5.0.0-beta.16",
