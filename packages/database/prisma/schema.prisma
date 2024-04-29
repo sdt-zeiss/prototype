@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector] // Used to save and compare embeddings
 }
 
 model User {
@@ -52,4 +54,17 @@ model Comment {
   author   User   @relation(fields: [authorId], references: [id])
 
   @@map("comments")
+}
+
+// PG Extension:  https://github.com/pgvector/pgvector
+// Example query: SELECT * FROM items ORDER BY embedding <-> '[3,1,2]' LIMIT 5;
+// Example on how to insert data with OpenAI: https://github.com/Code42Cate/funding/blob/main/apps/scraper/src/embeddings.ts
+// Example insert: INSERT INTO items (embedding) VALUES ('[1,2,3]'), ('[4,5,6]');
+
+model Items {
+  id        String                 @id @default(cuid())
+  content   String
+  embedding Unsupported("vector")?
+
+  @@map("items")
 }
