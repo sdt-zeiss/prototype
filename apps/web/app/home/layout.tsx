@@ -3,12 +3,8 @@
 import NavigationBar from "@/components/layout/navigation-bar";
 import { useSession } from "next-auth/react";
 import { Post } from "@/app/home/page";
-import { createContext, useState } from "react";
-
-export const PostContext = createContext({
-  posts: [] as Post[],
-  setPosts: (posts: Post[]) => {},
-});
+import { useState } from "react";
+import { PostContext } from "@/contexts/PostContext";
 
 export default function HomeLayout({
   children,
@@ -17,7 +13,7 @@ export default function HomeLayout({
 }) {
   const { data: session } = useSession();
 
-  const [posts, setPosts] = useState<Post[]>();
+  const [posts, setPosts] = useState<Post[]>([]);
 
   return (
     <PostContext.Provider value={{ posts, setPosts }}>
