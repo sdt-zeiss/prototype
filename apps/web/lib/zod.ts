@@ -13,3 +13,13 @@ export const authSchema = z.object({
   // well this is certainly a unique way to handle a boolean, but I don't know how to make it work with forms and typescript at the same time
   signup: z.enum(["true", "false"]),
 });
+
+export const postSchema = z.object({
+  title: z.string({ required_error: "Title is required" }),
+  content: z.string({ required_error: "Content is required" }),
+  type: z.enum(["Question", "Discussion", "Story"]),
+});
+
+export const commentSchema = z.object({
+  content: z.string({ required_error: "Comment is required" }),
+});

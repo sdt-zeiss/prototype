@@ -5,6 +5,13 @@ import React, { useState } from "react";
 import { Button } from "@ui/components/button";
 import { User } from "next-auth";
 import AvatarMenu from "@/components/layout/avatar-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@ui/components/dialog";
+import PostCreateDialog from "@/components/post/post-create-dialog";
 
 export default function NavigationBar({
   user,
@@ -14,6 +21,7 @@ export default function NavigationBar({
   title: string;
 }) {
   const [searchInput, setSearchInput] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-10 w-full border-b bg-white">
@@ -44,8 +52,20 @@ export default function NavigationBar({
           )}
         </div>
       </nav>
-      <nav className="mx-auto flex max-w-7xl flex-row items-center justify-start p-6 lg:gap-x-12 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl flex-row items-center justify-between p-6 lg:gap-x-12 lg:px-8">
         <span className="text-xl font-bold lg:justify-start">{title}</span>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <span className="text-md text-base font-medium">Create Post</span>
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent>
+            <DialogTitle>Create Post</DialogTitle>
+            <PostCreateDialog setDialogOpen={setDialogOpen} />
+          </DialogContent>
+        </Dialog>
       </nav>
     </header>
   );

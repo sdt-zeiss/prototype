@@ -1,6 +1,7 @@
 import "@ui/styles/globals.css";
 import { Inter } from "next/font/google";
 import { Toaster } from "@ui/components/toaster";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +16,7 @@ export default function RootLayout({
         <Toaster />
 
         <div className="" />
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

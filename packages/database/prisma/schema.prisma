@@ -14,10 +14,46 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email    String @unique
+  email    String    @unique
   password String
+  Post     Post[]
+  Comment  Comment[]
 
   @@map("users")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title   String
+  content String
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  type String
+
+  comments Comment[]
+
+  @@map("posts")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  content String
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  @@map("comments")
 }
 
 // PG Extension:  https://github.com/pgvector/pgvector
