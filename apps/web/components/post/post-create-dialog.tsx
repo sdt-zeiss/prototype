@@ -23,9 +23,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@ui/components/form";
-import { PostContext } from "@/app/home/layout";
 import { useSession } from "next-auth/react";
 import { postSchema } from "@/lib/zod";
+import { PostContext } from "@/contexts/PostContext";
 
 export default function PostCreateDialog({
   setDialogOpen,

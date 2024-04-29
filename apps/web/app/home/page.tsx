@@ -6,7 +6,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Dialog } from "@ui/components/dialog";
 import { getPostsWithComments } from "@/lib/actions";
 import { motion, AnimatePresence } from "framer-motion";
-import { PostContext } from "@/app/home/layout";
+import { PostContext } from "@/contexts/PostContext";
 
 export type Comment = {
   content: string;
@@ -37,7 +37,7 @@ export default function Page() {
     getPostsWithComments().then((posts) => {
       setPosts(posts);
     });
-  }, []);
+  }, [setPosts]);
 
   const deleteOwnPost = (posts: Post[], post: Post) => {
     return () => {
