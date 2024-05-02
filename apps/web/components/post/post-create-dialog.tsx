@@ -49,6 +49,7 @@ export default function PostCreateDialog({
   async function onSubmit(data: z.infer<typeof postSchema>) {
     try {
       const post = await createPost(data);
+      console.log("Created post", post);
       const modifiedPost = {
         ...post,
         author: { email: session.user.email },
