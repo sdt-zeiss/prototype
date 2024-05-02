@@ -49,16 +49,19 @@ export default function PostCreateDialog({
   async function onSubmit(data: z.infer<typeof postSchema>) {
     try {
       const post = await createPost(data);
-      setPosts([
-        {
-          ...post,
-          author: { email: session.user.email },
-          comments: [],
-        },
-        ...posts,
-      ]);
+      const modifiedPost = {
+        ...post,
+        author: { email: session.user.email },
+        comments: [],
+      };
+      if (posts && posts.length > 0) {
+        setPosts([modifiedPost, ...posts]);
+      } else {
+        setPosts([modifiedPost]);
+      }
       setDialogOpen(false);
     } catch (error) {
+      console.error(error);
       toast({
         title: "Invalid post",
         description: "Please check your post and try again.",
