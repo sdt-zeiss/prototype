@@ -124,7 +124,7 @@ export async function createPost(data: z.infer<typeof postSchema>) {
     return post;
   } catch (error) {
     console.error(error);
-    return error;
+    return null;
   }
 }
 
