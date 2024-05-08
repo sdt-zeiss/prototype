@@ -5,8 +5,5 @@ module.exports = {
   images: {
     domains: [""],
   },
-  experimental: {
-    serverActions: true,
-  },
   output: 'standalone',
 };
