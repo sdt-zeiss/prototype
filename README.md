@@ -58,6 +58,8 @@ pnpm run dev db:seed --filter database # Seed the database with some data
 pnpm run dev db:generate --filter database # Generate the Prisma client
 ```
 
+If you want to migrate the database schema, change your directory to `packages/database` and run `npx prisma migrate dev`. This will generate a new migration file in `prisma/migrations` and apply it to the database.
+
 ## Deployment
 
 The web app is deployed on sliplane.io using Docker. You can run the following command to build the Docker image:
