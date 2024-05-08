@@ -14,10 +14,12 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email    String    @unique
+  email    String  @unique
   password String
-  Post     Post[]
-  Comment  Comment[]
+  name     String?
+
+  Post    Post[]
+  Comment Comment[]
 
   @@map("users")
 }

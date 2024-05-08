@@ -24,9 +24,13 @@
     "db:seed": {
       "cache": false
     },
+    "db:migrate": {
+      "cache": false
+    },
     "start": {
       "dependsOn": ["^build", "^db:generate"]
     }
   },
+  "experimentalUI": true,
   "globalEnv": ["DATABASE_URL", "AUTH_SECRET"]
 }
