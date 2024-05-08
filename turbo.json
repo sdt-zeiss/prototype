@@ -31,6 +31,5 @@
       "dependsOn": ["^build", "^db:generate"]
     }
   },
-  "experimentalUI": true,
   "globalEnv": ["DATABASE_URL", "AUTH_SECRET"]
 }
