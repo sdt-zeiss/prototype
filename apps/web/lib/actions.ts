@@ -67,6 +67,16 @@ export async function getPostsWithComments() {
             email: true,
           },
         },
+        likes: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
         comments: {
           select: {
             id: true,
@@ -162,6 +172,54 @@ export async function deletePost(id: string) {
         author: {
           email: session.user.email,
         },
+      },
+    });
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
+export async function createLike(postId: string) {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      throw new Error("Unauthorized");
+    }
+
+    const like = await prisma.like.create({
+      data: {
+        post: {
+          connect: {
+            id: postId,
+          },
+        },
+        user: {
+          connect: {
+            email: session.user.email,
+          },
+        },
+      },
+    });
+    return like;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function deleteLike(postId: string) {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      throw new Error("Unauthorized");
+    }
+
+    await prisma.like.deleteMany({
+      where: {
+        postId,
+        userId: session.user.id,
       },
     });
     return true;

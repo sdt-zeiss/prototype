@@ -6,12 +6,14 @@ export default function PostCard({
   post,
   onClick,
   deleteOwnPost,
+  toggleOwnLike,
   setDialogOpen,
 }: {
   post: Post;
   onClick: () => void;
   deleteOwnPost: () => void;
   setDialogOpen: (open: boolean) => void;
+  toggleOwnLike: () => Promise<boolean>;
 }) {
   return (
     <DialogTrigger asChild>
@@ -24,6 +26,7 @@ export default function PostCard({
           post={post}
           deleteOwnPost={deleteOwnPost}
           setDialogOpen={setDialogOpen}
+          toggleOwnLike={toggleOwnLike}
         />
       </div>
     </DialogTrigger>

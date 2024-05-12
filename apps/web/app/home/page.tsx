@@ -4,9 +4,10 @@ import PostCard from "@/components/post/post-card";
 import PostDialog from "@/components/post/post-dialog";
 import React, { useContext, useEffect, useState } from "react";
 import { Dialog } from "@ui/components/dialog";
-import { getPostsWithComments } from "@/lib/actions";
+import { createLike, deleteLike, getPostsWithComments } from "@/lib/actions";
 import { motion, AnimatePresence } from "framer-motion";
 import { PostContext } from "@/contexts/PostContext";
+import { useSession } from "next-auth/react";
 
 export type Comment = {
   content: string;
@@ -24,12 +25,14 @@ export type Post = {
   content: string;
   type: string;
   author: { email: string };
+  likes: { id: string; user: { email: string } }[];
   comments: Comment[];
 };
 
 export default function Page() {
   const [openedPost, setOpenedPost] = useState<Post | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { data: session } = useSession();
 
   const { posts, setPosts } = useContext(PostContext);
 
@@ -42,6 +45,25 @@ export default function Page() {
   const deleteOwnPost = (posts: Post[], post: Post) => {
     return () => {
       setPosts(posts.filter((p) => p.id !== post.id));
+    };
+  };
+
+  const toggleOwnLike = (posts: Post[], post: Post) => {
+    return async () => {
+      if (post.likes.some((like) => like.user.email === session.user.email)) {
+        await deleteLike(post.id);
+        post.likes = post.likes.filter(
+          (like) => like.user.email !== session.user.email,
+        );
+      } else {
+        const like = await createLike(post.id);
+        post.likes.push({ id: like.id, user: { email: session.user.email } });
+      }
+      const newPosts = [...posts.filter((p) => p.id !== post.id), post];
+      newPosts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+      setPosts(newPosts);
+      return true;
     };
   };
 
@@ -67,6 +89,7 @@ export default function Page() {
                     onClick={() => setOpenedPost(post)}
                     deleteOwnPost={deleteOwnPost(posts, post)}
                     setDialogOpen={setDialogOpen}
+                    toggleOwnLike={toggleOwnLike(posts, post)}
                   />
                 </motion.div>
               ))}
@@ -78,6 +101,7 @@ export default function Page() {
             post={openedPost}
             setDialogOpen={setDialogOpen}
             deleteOwnPost={deleteOwnPost(posts, openedPost)}
+            toggleOwnLike={toggleOwnLike(posts, openedPost)}
           />
         </AnimatePresence>
       </Dialog>

@@ -17,7 +17,11 @@ model User {
   email    String    @unique
   password String
   Post     Post[]
+  Like     Like[]
   Comment  Comment[]
+
+  ageGroup   String @default("18-24") // 18-24, 25-34, 35-44, 45-54, 55-64, 65+
+  profession String @default("Student") // Student, Developer, Designer, Manager, Other
 
   @@map("users")
 }
@@ -35,9 +39,24 @@ model Post {
 
   type String
 
+  likes    Like[]
   comments Comment[]
 
   @@map("posts")
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("likes")
 }
 
 model Comment {
