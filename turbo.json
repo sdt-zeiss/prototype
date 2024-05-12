@@ -24,6 +24,9 @@
     "db:seed": {
       "cache": false
     },
+    "db:migrate": {
+      "cache": false
+    },
     "start": {
       "dependsOn": ["^build", "^db:generate"]
     }

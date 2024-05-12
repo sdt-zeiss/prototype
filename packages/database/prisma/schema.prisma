@@ -14,11 +14,13 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  email    String    @unique
+  email    String  @unique
   password String
-  Post     Post[]
+  name     String?
+
+  Post    Post[]
   Like     Like[]
-  Comment  Comment[]
+  Comment Comment[]
 
   ageGroup   String @default("18-24") // 18-24, 25-34, 35-44, 45-54, 55-64, 65+
   profession String @default("Student") // Student, Developer, Designer, Manager, Other
