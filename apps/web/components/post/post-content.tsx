@@ -2,20 +2,23 @@ import { Post } from "@/app/home/page";
 import { Button } from "@ui/components/button";
 import { deletePost } from "@/lib/actions";
 import { useSession } from "next-auth/react";
-import { Trash } from "lucide-react";
+import { ThumbsUp, Trash } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function PostContent({
   post,
   deleteOwnPost,
   setDialogOpen,
+  toggleOwnLike,
 }: {
   post: Post;
   type: "create" | "view" | "edit";
   deleteOwnPost: () => void;
   setDialogOpen: (open: boolean) => void;
+  toggleOwnLike: () => Promise<boolean>;
 }) {
   const { data: session, status } = useSession();
+  console.log("pots", post);
 
   return (
     <motion.div className="flex flex-col gap-y-2">
@@ -23,23 +26,48 @@ export default function PostContent({
         <motion.span className="w-3/4 text-2xl font-bold">
           {post.title}
         </motion.span>
-        {status === "authenticated" &&
-          session.user.email === post.author.email && (
+        <div className="flex flex-row gap-4">
+          {status === "authenticated" &&
+            session.user.email === post.author.email && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="bg-muted rounded-lg"
+                aria-label="Delete Post"
+                onClick={async (event) => {
+                  event.stopPropagation();
+                  setDialogOpen(false);
+                  deleteOwnPost();
+                  await deletePost(post.id);
+                }}
+              >
+                <Trash className="size-5" />
+              </Button>
+            )}
+          {status === "authenticated" && (
             <Button
               variant="ghost"
               size="icon"
               className="bg-muted rounded-lg"
-              aria-label="Delete Post"
+              aria-label="Like Post"
               onClick={async (event) => {
                 event.stopPropagation();
-                setDialogOpen(false);
-                deleteOwnPost();
-                await deletePost(post.id);
+                await toggleOwnLike();
               }}
             >
-              <Trash className="size-5" />
+              <ThumbsUp
+                className="size-5"
+                fill={
+                  post.likes.find(
+                    (like) => like.user.email === session.user.email,
+                  ) !== undefined
+                    ? "black"
+                    : "none"
+                }
+              />
             </Button>
           )}
+        </div>
       </motion.div>
 
       <motion.span className="bg-primary text-primary-foreground w-min rounded-full px-3 py-1 text-base">
@@ -52,7 +80,7 @@ export default function PostContent({
           <span className="text-base font-bold">{post.author.email}</span>
         </div>
         <div className="text-base font-normal">
-          <span>{0} Likes</span>
+          <span>{post.likes.length} Likes</span>
           <span className="mx-2">•</span>
           <span>{post.comments ? post.comments.length : 0} Comments</span>
         </div>

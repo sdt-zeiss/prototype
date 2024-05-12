@@ -54,6 +54,7 @@ export default function PostCreateDialog({
         ...post,
         author: { email: session.user.email },
         comments: [],
+        likes: [],
       };
       if (posts && posts.length > 0) {
         setPosts([modifiedPost, ...posts]);

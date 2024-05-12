@@ -30,11 +30,13 @@ export default function PostDialog({
   post,
   type,
   deleteOwnPost,
+  toggleOwnLike,
   setDialogOpen,
 }: {
   post: Post | null;
   type: "create" | "view" | "edit";
   deleteOwnPost: () => void;
+  toggleOwnLike: () => Promise<boolean>;
   setDialogOpen: (open: boolean) => void;
 }) {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -68,6 +70,7 @@ export default function PostDialog({
             type={type}
             deleteOwnPost={deleteOwnPost}
             setDialogOpen={setDialogOpen}
+            toggleOwnLike={toggleOwnLike}
           />
 
           <div>
