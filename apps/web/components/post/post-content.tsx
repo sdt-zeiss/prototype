@@ -18,7 +18,6 @@ export default function PostContent({
   toggleOwnLike: () => Promise<boolean>;
 }) {
   const { data: session, status } = useSession();
-  console.log("pots", post);
 
   return (
     <motion.div className="flex flex-col gap-y-2">
@@ -27,23 +26,6 @@ export default function PostContent({
           {post.title}
         </motion.span>
         <div className="flex flex-row gap-4">
-          {status === "authenticated" &&
-            session.user.email === post.author.email && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="bg-muted rounded-lg"
-                aria-label="Delete Post"
-                onClick={async (event) => {
-                  event.stopPropagation();
-                  setDialogOpen(false);
-                  deleteOwnPost();
-                  await deletePost(post.id);
-                }}
-              >
-                <Trash className="size-5" />
-              </Button>
-            )}
           {status === "authenticated" && (
             <Button
               variant="ghost"
@@ -67,6 +49,23 @@ export default function PostContent({
               />
             </Button>
           )}
+          {status === "authenticated" &&
+            session.user.email === post.author.email && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="bg-muted rounded-lg"
+                aria-label="Delete Post"
+                onClick={async (event) => {
+                  event.stopPropagation();
+                  setDialogOpen(false);
+                  deleteOwnPost();
+                  await deletePost(post.id);
+                }}
+              >
+                <Trash className="size-5" />
+              </Button>
+            )}
         </div>
       </motion.div>
 

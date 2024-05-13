@@ -8,7 +8,7 @@ import { prisma } from "database";
 export async function submitAuthForm(data: z.infer<typeof authSchema>) {
   const user = await signIn("credentials", {
     ...data,
-    redirectTo: `/dashboard?onboarding=${data.signup}`,
+    redirectTo: `/home?onboarding=${data.signup}`,
   });
 
   if (!user) {
@@ -317,5 +317,48 @@ export async function deleteComment(id: string) {
   } catch (error) {
     console.error(error);
     return false;
+  }
+}
+
+export async function updateProfileOnboarding(data: {
+  ageRange: string;
+  profession: string;
+}) {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      throw new Error("Unauthorized");
+    }
+    const user = await prisma.user.update({
+      where: {
+        email: session.user.email,
+      },
+      data: {
+        ageGroup: data.ageRange,
+        profession: data.profession,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getProfile() {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      throw new Error("Unauthorized");
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 }

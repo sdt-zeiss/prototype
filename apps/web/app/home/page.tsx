@@ -8,6 +8,8 @@ import { createLike, deleteLike, getPostsWithComments } from "@/lib/actions";
 import { motion, AnimatePresence } from "framer-motion";
 import { PostContext } from "@/contexts/PostContext";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import OnboardingDialog from "@/components/onboarding/onboarding-dialog";
 
 export type Comment = {
   content: string;
@@ -32,9 +34,16 @@ export type Post = {
 export default function Page() {
   const [openedPost, setOpenedPost] = useState<Post | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isOnboarding, setIsOnboarding] = useState<boolean>(false);
   const { data: session } = useSession();
 
   const { posts, setPosts } = useContext(PostContext);
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    setIsOnboarding(searchParams.get("onboarding") === "true");
+  }, [searchParams]);
 
   useEffect(() => {
     getPostsWithComments().then((posts) => {
@@ -75,7 +84,7 @@ export default function Page() {
             {posts &&
               posts.map((post) => (
                 <motion.div
-                  className="w-1/3"
+                  className="mx-4 lg:mx-0 lg:w-1/3"
                   key={post.id}
                   layoutId={post.id}
                   layout
@@ -104,6 +113,11 @@ export default function Page() {
             toggleOwnLike={toggleOwnLike(posts, openedPost)}
           />
         </AnimatePresence>
+        <Dialog open={isOnboarding} onOpenChange={setIsOnboarding}>
+          <AnimatePresence>
+            <OnboardingDialog setDialogOpen={setIsOnboarding} />
+          </AnimatePresence>
+        </Dialog>
       </Dialog>
     </div>
   );

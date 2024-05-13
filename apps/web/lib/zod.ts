@@ -23,3 +23,8 @@ export const postSchema = z.object({
 export const commentSchema = z.object({
   content: z.string({ required_error: "Comment is required" }),
 });
+
+export const onboardingSchema = z.object({
+  ageRange: z.string({ required_error: "Age range is required" }),
+  profession: z.string({ required_error: "Profession is required" }),
+});
