@@ -3,7 +3,7 @@
 import NavigationBar from "@/components/layout/navigation-bar";
 import { useSession } from "next-auth/react";
 import { Post } from "@/app/home/page";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { PostContext } from "@/contexts/PostContext";
 
 export default function HomeLayout({
@@ -17,13 +17,15 @@ export default function HomeLayout({
 
   return (
     <PostContext.Provider value={{ posts, setPosts }}>
-      <div className="flex flex-col">
-        <NavigationBar
-          user={session && session.user ? session.user : undefined}
-          title="How to make decisions in an uncertain environment?"
-        />
-        <main className="">{children}</main>
-      </div>
+      <Suspense>
+        <div className="flex flex-col">
+          <NavigationBar
+            user={session && session.user ? session.user : undefined}
+            title="How to make decisions in an uncertain environment?"
+          />
+          <main className="">{children}</main>
+        </div>
+      </Suspense>
     </PostContext.Provider>
   );
 }
