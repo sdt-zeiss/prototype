@@ -1,0 +1,6 @@
+FROM bitnami/minio:2024.5.10
+
+EXPOSE 9000
+
+ENV MINIO_DEFAULT_BUCKETS="public"
+
