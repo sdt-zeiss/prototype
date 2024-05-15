@@ -15,13 +15,19 @@ export const authSchema = z.object({
 });
 
 export const postSchema = z.object({
-  title: z.string({ required_error: "Title is required" }),
-  content: z.string({ required_error: "Content is required" }),
+  title: z
+    .string({ required_error: "Title is required" })
+    .min(1, "Title cannot be empty"),
+  content: z
+    .string({ required_error: "Content is required" })
+    .min(1, "Content cannot be empty"),
   type: z.enum(["Question", "Discussion", "Story"]),
 });
 
 export const commentSchema = z.object({
-  content: z.string({ required_error: "Comment is required" }),
+  content: z
+    .string({ required_error: "Comment is required" })
+    .min(1, "Comment cannot be empty"),
 });
 
 export const onboardingSchema = z.object({
