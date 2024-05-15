@@ -59,6 +59,7 @@ export async function getPostsWithComments() {
         id: true,
         createdAt: true,
         updatedAt: true,
+        status: true,
         title: true,
         content: true,
         type: true,
@@ -91,6 +92,11 @@ export async function getPostsWithComments() {
           },
         },
       },
+      where: {
+        status: {
+          in: ["user_generated", "ai_generated_approved"],
+        },
+      },
     });
     return posts;
   } catch (error) {
@@ -121,6 +127,7 @@ export async function createPost(data: z.infer<typeof postSchema>) {
     }
     const post = await prisma.post.create({
       data: {
+        status: "user_generated",
         title: data.title,
         content: data.content,
         type: data.type,
@@ -357,6 +364,99 @@ export async function getProfile() {
       },
     });
     return user;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getUnreviewedPosts() {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      throw new Error("Unauthorized");
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+    if (user.type !== "Admin") {
+      throw new Error("Unauthorized");
+    }
+
+    const posts = await prisma.post.findMany({
+      where: {
+        status: "ai_generated_unreviewed",
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        status: true,
+        title: true,
+        content: true,
+        type: true,
+        author: {
+          select: {
+            email: true,
+          },
+        },
+        likes: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            updatedAt: true,
+            author: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return posts;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function reviewPost(id: string, status: string) {
+  try {
+    const session = await auth();
+    if (!session || !session.user || !session.user.email) {
+      throw new Error("Unauthorized");
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+    if (user.type !== "Admin") {
+      throw new Error("Unauthorized");
+    }
+    const post = await prisma.post.update({
+      where: {
+        id,
+      },
+      data: {
+        status,
+      },
+    });
+    return post;
   } catch (error) {
     console.error(error);
     return null;
