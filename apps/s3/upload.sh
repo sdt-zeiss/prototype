@@ -1,6 +1,6 @@
 #!/bin/bash
 
-URL=minio-debug.sliplane.app
+URL=prototype-minio.sliplane.app
 USERNAME=prototype
 PASSWORD=
 BUCKET=public
