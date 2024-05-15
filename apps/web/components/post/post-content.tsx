@@ -7,12 +7,13 @@ import { motion } from "framer-motion";
 
 export default function PostContent({
   post,
+  type,
   deleteOwnPost,
   setDialogOpen,
   toggleOwnLike,
 }: {
   post: Post;
-  type: "create" | "view" | "edit";
+  type: "create" | "view" | "edit" | "review";
   deleteOwnPost: () => void;
   setDialogOpen: (open: boolean) => void;
   toggleOwnLike: () => Promise<boolean>;
@@ -26,7 +27,7 @@ export default function PostContent({
           {post.title}
         </motion.span>
         <div className="flex flex-row gap-4">
-          {status === "authenticated" && (
+          {status === "authenticated" && type !== "review" && (
             <Button
               variant="ghost"
               size="icon"
@@ -50,6 +51,7 @@ export default function PostContent({
             </Button>
           )}
           {status === "authenticated" &&
+            type !== "review" &&
             session.user.email === post.author.email && (
               <Button
                 variant="ghost"
@@ -78,11 +80,13 @@ export default function PostContent({
           <span className="text-base font-normal">by</span>
           <span className="text-base font-bold">{post.author.email}</span>
         </div>
-        <div className="text-base font-normal">
-          <span>{post.likes.length} Likes</span>
-          <span className="mx-2">•</span>
-          <span>{post.comments ? post.comments.length : 0} Comments</span>
-        </div>
+        {type !== "review" && (
+          <div className="text-base font-normal">
+            <span>{post.likes.length} Likes</span>
+            <span className="mx-2">•</span>
+            <span>{post.comments ? post.comments.length : 0} Comments</span>
+          </div>
+        )}
       </motion.div>
       <motion.span className="text-sm font-normal">
         {post.createdAt.toLocaleString()}

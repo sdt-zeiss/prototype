@@ -18,7 +18,7 @@ export default function PostCard({
   return (
     <DialogTrigger asChild>
       <div
-        className="hover:scale-102  cursor-pointer rounded-xl border p-5 shadow transition ease-in-out hover:shadow-2xl"
+        className="hover:scale-102 cursor-pointer rounded-xl border p-5 shadow transition ease-in-out hover:shadow-2xl"
         onClick={onClick}
       >
         <PostContent
