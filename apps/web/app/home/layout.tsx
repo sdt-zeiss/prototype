@@ -20,7 +20,7 @@ export default function HomeLayout({
       <Suspense>
         <div className="flex flex-col">
           <NavigationBar
-            user={session && session.user ? session.user : undefined}
+            user={session?.user}
             title="How to make decisions in an uncertain environment?"
           />
           <main className="">{children}</main>
