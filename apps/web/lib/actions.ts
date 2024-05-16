@@ -65,6 +65,7 @@ export async function getPostsWithComments() {
         status: true,
         title: true,
         content: true,
+        imageId: true,
         type: true,
         author: {
           select: {

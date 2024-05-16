@@ -25,6 +25,7 @@ export type Post = {
   updatedAt: Date;
   status: string;
   title: string;
+  imageId: string;
   content: string;
   type: string;
   author: { email: string };

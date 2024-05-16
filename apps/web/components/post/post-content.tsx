@@ -4,6 +4,7 @@ import { deletePost } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { ThumbsUp, Trash } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function PostContent({
   post,
@@ -74,6 +75,17 @@ export default function PostContent({
       <motion.span className="bg-primary text-primary-foreground w-min rounded-full px-3 py-1 text-base">
         {post.type}
       </motion.span>
+      {post.imageId && (
+        <motion.div>
+          <Image
+            className="rounded-xl"
+            src={`/api/images/${post.imageId}`}
+            alt={post.title}
+            width={1000}
+            height={600}
+          />
+        </motion.div>
+      )}
       <motion.span className="text-sm font-normal">{post.content}</motion.span>
       <motion.div className="flex flex-row justify-between">
         <div className="flex flex-row items-center justify-start gap-1">

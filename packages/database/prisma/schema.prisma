@@ -33,6 +33,7 @@ model Post {
   title     String    @map("title")
   content   String    @map("content")
   authorId  String    @map("author_id")
+  imageId   String?   @map("image_id")
   type      String    @map("type")
   status    String    @default("user_generated") @map("status")
   comments  Comment[]
