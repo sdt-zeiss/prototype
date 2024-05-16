@@ -6,45 +6,39 @@ generator client {
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
-  extensions = [vector] // Used to save and compare embeddings
+  extensions = [vector]
 }
 
 model User {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  email    String  @unique
-  password String
-  name     String?
-  type     String  @default("User") // User, Admin
-
-  Post    Post[]
-  Like    Like[]
-  Comment Comment[]
-
-  ageGroup   String @default("18-24") // 18-24, 25-34, 35-44, 45-54, 55-64, 65+
-  profession String @default("Student") // Student, Developer, Designer, Manager, Other
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  email      String    @unique @map("email")
+  password   String    @map("password")
+  name       String?   @map("name")
+  ageGroup   String    @default("18-24") @map("age_group")
+  profession String    @default("Student") @map("profession")
+  type       String    @default("User") @map("type")
+  Comment    Comment[]
+  Like       Like[]
+  Post       Post[]
 
   @@map("users")
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  status    String   @default("user_generated") // user_generated, ai_generated_unreviewed,  ai_generated_approved, ai_generated_rejected
-
-  title   String
-  content String
-
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id])
-
-  type String
-
-  likes    Like[]
-  comments Comment[]
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  title     String    @map("title")
+  content   String    @map("content")
+  authorId  String    @map("author_id")
+  imageId   String?   @map("image_id")
+  type      String    @map("type")
+  status    String    @default("user_generated") @map("status")
+  comments  Comment[]
+  likes     Like[]
+  author    User      @relation(fields: [authorId], references: [id])
 
   @@map("posts")
 }
@@ -53,12 +47,10 @@ model Like {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  postId String
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  postId    String   @map("post_id")
+  userId    String   @map("user_id")
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("likes")
 }
@@ -67,22 +59,14 @@ model Comment {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  content String
-
-  postId String
-  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id])
+  content   String   @map("content")
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@map("comments")
 }
-
-// PG Extension:  https://github.com/pgvector/pgvector
-// Example query: SELECT * FROM items ORDER BY embedding <-> '[3,1,2]' LIMIT 5;
-// Example on how to insert data with OpenAI: https://github.com/Code42Cate/funding/blob/main/apps/scraper/src/embeddings.ts
-// Example insert: INSERT INTO items (embedding) VALUES ('[1,2,3]'), ('[4,5,6]');
 
 model Items {
   id        String                 @id @default(cuid())
@@ -90,4 +74,22 @@ model Items {
   embedding Unsupported("vector")?
 
   @@map("items")
+}
+
+model langchain_pg_collection {
+  uuid                   String                   @id @db.Uuid
+  name                   String                   @unique @db.VarChar
+  cmetadata              Json?                    @db.Json
+  langchain_pg_embedding langchain_pg_embedding[]
+}
+
+model langchain_pg_embedding {
+  id                      String                   @id @unique(map: "ix_langchain_pg_embedding_id") @db.VarChar
+  collection_id           String?                  @map("collection_id") @db.Uuid
+  embedding               Unsupported("vector")?   @map("embedding")
+  document                String?                  @map("document") @db.VarChar
+  cmetadata               Json?                    @map("cmetadata")
+  langchain_pg_collection langchain_pg_collection? @relation(fields: [collection_id], references: [uuid], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([cmetadata(ops: JsonbPathOps)], map: "ix_cmetadata_gin", type: Gin)
 }

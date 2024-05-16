@@ -4,6 +4,9 @@ import { auth, signIn, signOut } from "@/auth";
 import { authSchema, commentSchema, postSchema } from "./zod";
 import { z } from "zod";
 import { prisma } from "database";
+import { randomUUID } from "crypto";
+import { uploadBuffer } from "s3";
+import sharp from "sharp";
 
 export async function submitAuthForm(data: z.infer<typeof authSchema>) {
   const user = await signIn("credentials", {
@@ -62,6 +65,7 @@ export async function getPostsWithComments() {
         status: true,
         title: true,
         content: true,
+        imageId: true,
         type: true,
         author: {
           select: {
@@ -125,11 +129,27 @@ export async function createPost(data: z.infer<typeof postSchema>) {
     if (!session || !session.user || !session.user.email) {
       throw new Error("Unauthorized");
     }
+
+    let imageId: string;
+    if (data.imageDataUrl !== undefined) {
+      imageId = randomUUID();
+
+      const transformedImage = await sharp(
+        Buffer.from(data.imageDataUrl.split(",")[1], "base64"),
+      )
+        .webp()
+        .toBuffer();
+
+      await uploadBuffer(transformedImage, imageId);
+      console.log(`Image uploaded with key: ${imageId}`);
+    }
+
     const post = await prisma.post.create({
       data: {
         status: "user_generated",
         title: data.title,
         content: data.content,
+        imageId,
         type: data.type,
         author: {
           connect: {
@@ -138,10 +158,11 @@ export async function createPost(data: z.infer<typeof postSchema>) {
         },
       },
     });
+
     return post;
   } catch (error) {
     console.error(error);
-    return error;
+    return error.message;
   }
 }
 
@@ -395,6 +416,7 @@ export async function getUnreviewedPosts() {
         updatedAt: true,
         status: true,
         title: true,
+        imageId: true,
         content: true,
         type: true,
         author: {

@@ -26,6 +26,7 @@ import {
 import { useSession } from "next-auth/react";
 import { postSchema } from "@/lib/zod";
 import { PostContext } from "@/contexts/PostContext";
+import { Post } from "@/app/home/page";
 
 export default function PostCreateDialog({
   setDialogOpen,
@@ -46,20 +47,34 @@ export default function PostCreateDialog({
     },
   });
 
+  function getImageDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
   async function onSubmit(data: z.infer<typeof postSchema>) {
     try {
-      const post = await createPost(data);
-      const modifiedPost = {
+      const post = await createPost({
+        content: data.content,
+        title: data.title,
+        type: data.type,
+        imageDataUrl:
+          data.image.length > 0
+            ? await getImageDataUrl(data.image.item(0))
+            : undefined,
+      });
+      console.log(post);
+      const modifiedPost: Post = {
         ...post,
         author: { email: session.user.email },
         comments: [],
         likes: [],
       };
-      if (posts && posts.length > 0) {
-        setPosts([modifiedPost, ...posts]);
-      } else {
-        setPosts([modifiedPost]);
-      }
+      setPosts([modifiedPost, ...posts]);
       setDialogOpen(false);
     } catch (error) {
       console.error(error);
@@ -70,11 +85,13 @@ export default function PostCreateDialog({
     }
   }
 
+  const fileRef = form.register("image");
+
   return (
     <div>
       <Form {...form}>
         <form
-          className="flex flex-col justify-start space-y-2"
+          className="flex flex-col justify-start space-y-3"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
@@ -103,7 +120,19 @@ export default function PostCreateDialog({
               </FormItem>
             )}
           />
-
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Image (optional)</FormLabel>
+                <FormControl>
+                  <Input type="file" placeholder="shadcn" {...fileRef} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="type"
