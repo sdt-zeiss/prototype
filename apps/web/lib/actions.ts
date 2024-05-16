@@ -416,6 +416,7 @@ export async function getUnreviewedPosts() {
         updatedAt: true,
         status: true,
         title: true,
+        imageId: true,
         content: true,
         type: true,
         author: {
