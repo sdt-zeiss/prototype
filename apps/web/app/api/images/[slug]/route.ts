@@ -1,6 +1,8 @@
 import { getBuffer } from "s3";
 import sharp from "sharp";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   const imageId = request.url.split("/").pop();
 
