@@ -31,5 +31,5 @@
       "dependsOn": ["^build", "^db:generate"]
     }
   },
-  "globalEnv": ["DATABASE_URL", "AUTH_SECRET"]
+  "globalEnv": ["DATABASE_URL", "AUTH_SECRET", "S3_URL", "S3_USERNAME", "S3_PASSWORD", "S3_BUCKET"]
 }
