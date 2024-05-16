@@ -35,6 +35,7 @@ model Post {
   updatedAt DateTime @updatedAt @map("updated_at")
   status    String   @default("user_generated") // user_generated, ai_generated_unreviewed,  ai_generated_approved, ai_generated_rejected
 
+  imageId String?
   title   String
   content String
 

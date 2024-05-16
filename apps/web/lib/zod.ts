@@ -14,6 +14,14 @@ export const authSchema = z.object({
   signup: z.enum(["true", "false"]),
 });
 
+const MAX_FILE_SIZE = 1024 * 1024 * 5;
+const ACCEPTED_IMAGE_MIME_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
+
 export const postSchema = z.object({
   title: z
     .string({ required_error: "Title is required" })
@@ -21,6 +29,16 @@ export const postSchema = z.object({
   content: z
     .string({ required_error: "Content is required" })
     .min(1, "Content cannot be empty"),
+  image: (typeof window === "undefined" ? z.any() : z.instanceof(FileList))
+    .refine((files) => {
+      return files?.[0]?.size <= MAX_FILE_SIZE;
+    }, `Max image size is 5MB.`)
+    .refine(
+      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
+      "Only .jpg, .jpeg, .png and .webp formats are supported.",
+    )
+    .optional(),
+  imageDataUrl: z.string().optional(),
   type: z.enum(["Question", "Discussion", "Story"]),
 });
 
