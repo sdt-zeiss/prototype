@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function Page() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false); // State to manage button disabled state
 
   // get unreviewed posts on page load
   useEffect(() => {
@@ -29,32 +30,93 @@ export default function Page() {
   const { toast } = useToast();
 
   const onSubmitUpload = async (event) => {
-    const endpoint = "https://example.endpoint.com/upload";
+    event.preventDefault();
+    const endpoint = "https://prototype-ai.sliplane.app/analyze-audio";
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("audio_file", file);
+
+    if (!file) {
+      toast({
+        title: "No file selected",
+        description: "Please select an audio or video file to upload",
+      });
+      return;
+    }
+
+    setIsUploading(true); // Disable the button
+
     const response = await fetch(endpoint, {
       method: "POST",
       body: formData,
     });
-    if (response.ok) {
-      toast({
-        title: "Upload successful",
-        description: "Your audio has been uploaded successfully",
-      });
-    } else {
-      toast({
-        title: "Upload failed",
-        description: "Your audio could not be uploaded",
-      });
-    }
+
+    try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          toast({
+            title: "Upload successful",
+            description: "Your file has been uploaded successfully",
+          });
+          console.log(result); // Handle the response data
+        } else {
+          const errorData = await response.json();
+          toast({
+            title: "Upload failed",
+            description: errorData.error || "Your file could not be uploaded",
+          });
+        }
+      } catch (error) {
+        toast({
+          title: "Upload failed",
+          description: "An error occurred while uploading the file",
+        });
+        console.error("Error uploading file:", error);
+      } finally {
+        setIsUploading(false); // Re-enable the button
+      }
+    // if (response.ok) {
+    //   toast({
+    //     title: "Upload successful",
+    //     description: "Your audio has been uploaded successfully",
+    //   });
+    // } else {
+    //   toast({
+    //     title: "Upload failed",
+    //     description: "Your audio could not be uploaded",
+    //   });
+    // }
   };
 
   const handleFileChange = (event: any) => {
-    setFile(event.target.files[0]);
-    // toast
+    const selectedFile = event.target.files[0];
+
+    if (!selectedFile) {
+      toast({
+        title: "No file selected",
+        description: "Please select an audio or video file to upload",
+      });
+      return;
+    }
+
+    // Constrain filetypes to be one of the following
+    const allowedTypes = ["audio/mp3", "audio/mpeg", "audio/wav", "audio/ogg", "video/mp4", "video/webm"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload a valid audio or video file",
+      });
+      return;
+    }
+
+    setFile(selectedFile);
     toast({
       title: "File selected",
-      description: "Your file has been selected",
+      description: `Your file ${selectedFile.name} has been selected`,
     });
   };
 
@@ -104,7 +166,7 @@ export default function Page() {
               </label>
             </div>
             {file && <span>{file.name}</span>}
-            <Button type="submit">Upload</Button>
+            <Button type="submit" disabled={isUploading}>Upload</Button>
           </form>
         </div>
       </div>
