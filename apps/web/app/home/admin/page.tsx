@@ -79,17 +79,6 @@ export default function Page() {
       } finally {
         setIsUploading(false); // Re-enable the button
       }
-    // if (response.ok) {
-    //   toast({
-    //     title: "Upload successful",
-    //     description: "Your audio has been uploaded successfully",
-    //   });
-    // } else {
-    //   toast({
-    //     title: "Upload failed",
-    //     description: "Your audio could not be uploaded",
-    //   });
-    // }
   };
 
   const handleFileChange = (event: any) => {
