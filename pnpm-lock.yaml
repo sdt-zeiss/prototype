@@ -27,6 +27,73 @@ importers:
         specifier: '1.12'
         version: 1.12.5
 
+  apps/station:
+    dependencies:
+      bcrypt:
+        specifier: ^5.1.1
+        version: 5.1.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      database:
+        specifier: workspace:*
+        version: link:../../packages/database
+      lucide-react:
+        specifier: ^0.378.0
+        version: 0.378.0(react@18.3.1)
+      next:
+        specifier: ^14.2.3
+        version: 14.2.3(react-dom@18.3.1)(react@18.3.1)
+      openai:
+        specifier: ^4.42.0
+        version: 4.42.0
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      react-type-animation:
+        specifier: ^3.2.0
+        version: 3.2.0(prop-types@15.8.1)(react-dom@18.3.1)(react@18.3.1)
+      react-voice-visualizer:
+        specifier: ^1.8.1
+        version: 1.8.1(react-dom@18.3.1)(react@18.3.1)
+      sharp:
+        specifier: ^0.33.4
+        version: 0.33.4
+      ui:
+        specifier: workspace:*
+        version: link:../../packages/ui
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.11
+        version: 20.12.11
+      '@types/react':
+        specifier: ^18.3.1
+        version: 18.3.1
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.0
+      autoprefixer:
+        specifier: ^10.4.19
+        version: 10.4.19(postcss@8.4.38)
+      eslint-config-custom:
+        specifier: workspace:^
+        version: link:../../packages/eslint-config-custom
+      postcss:
+        specifier: ^8.4.38
+        version: 8.4.38
+      tailwindcss:
+        specifier: ^3.4.3
+        version: 3.4.3
+      tsconfig:
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      typescript:
+        specifier: ^5.4.5
+        version: 5.4.5
+
   apps/web:
     dependencies:
       '@dnd-kit/core':
@@ -83,6 +150,12 @@ importers:
       react-hook-form:
         specifier: ^7.51.4
         version: 7.51.4(react@18.3.1)
+      react-type-animation:
+        specifier: ^3.2.0
+        version: 3.2.0(prop-types@15.8.1)(react-dom@18.3.1)(react@18.3.1)
+      react-voice-visualizer:
+        specifier: ^1.8.1
+        version: 1.8.1(react-dom@18.3.1)(react@18.3.1)
       recharts:
         specifier: ^2.12.7
         version: 2.12.7(react-dom@18.3.1)(react@18.3.1)
@@ -6206,6 +6279,18 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
+  /react-type-animation@3.2.0(prop-types@15.8.1)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-WXTe0i3rRNKjmggPvT5ntye1QBt0ATGbijeW6V3cQe2W0jaMABXXlPPEdtofnS9tM7wSRHchEvI9SUw+0kUohw==}
+    peerDependencies:
+      prop-types: ^15.5.4
+      react: '>= 15.0.0'
+      react-dom: '>= 15.0.0'
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
   /react-use-measure@2.1.1(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-nocZhN26cproIiIduswYpV5y5lQpSQS1y/4KuvUCjSKmw7ZWIS/+g3aFnX3WdBkyuGUtTLif3UTqnLLhbDoQig==}
     peerDependencies:
@@ -6213,6 +6298,16 @@ packages:
       react-dom: '>=16.13'
     dependencies:
       debounce: 1.2.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
+  /react-voice-visualizer@1.8.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-v7dEfb4HbMwhUpLA6FDVVMyNFw8/pOlBNHW4NfhvXSpL8WFuqSdOzEo4HdOC/T5HnpDPKErk4SbGJPOzvlfxfQ==}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false

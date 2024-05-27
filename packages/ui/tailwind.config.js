@@ -77,6 +77,12 @@ module.exports = {
           to: { height: 0 },
         },
       },
+      gridTemplateColumns: {
+        '40': 'repeat(40, minmax(0, 1fr))',
+      },
+      gridTemplateRows: {
+        '24': 'repeat(24, minmax(0, 1fr))',
+      },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
