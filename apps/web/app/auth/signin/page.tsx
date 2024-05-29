@@ -17,9 +17,12 @@ import { useForm } from "react-hook-form";
 import { authSchema } from "@/lib/zod";
 import { z } from "zod";
 import { submitAuthForm } from "@/lib/actions";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Auth() {
+  const searchParams = useSearchParams();
   const { toast } = useToast();
+  const router = useRouter();
   const form = useForm<z.infer<typeof authSchema>>({
     resolver: zodResolver(authSchema),
     defaultValues: {
@@ -38,6 +41,20 @@ export default function Auth() {
         description: "Please check your email and password and try again.",
       });
     }
+  }
+
+  if (searchParams.get("token") && searchParams.get("email")) {
+    onSubmit({
+      email: searchParams.get("email") ?? "",
+      password: searchParams.get("token") ?? "",
+      signup: searchParams.get("signup") === "true" ? "true" : "false",
+    })
+      .then(() => {
+        router.push("/home");
+      })
+      .catch(() => {
+        router.push("/auth/signin");
+      });
   }
 
   return (

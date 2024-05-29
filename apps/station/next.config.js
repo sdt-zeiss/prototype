@@ -6,7 +6,4 @@ module.exports = {
     domains: [""],
   },
   output: 'standalone',
-  experimental: {
-    missingSuspenseWithCSRBailout: false,
-  }
 };

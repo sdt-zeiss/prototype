@@ -25,10 +25,15 @@ export async function verifyAndGetUser(email: string, password: string) {
   }
 }
 
+// createUser creates a new user in the database if they don't exist, otherwise it returns the existing user
 export async function createUser(email: string, password: string) {
   try {
-    const user = await prisma.user.create({
-      data: {
+    const user = await prisma.user.upsert({
+      where: {
+        email,
+      },
+      update: {},
+      create: {
         email,
         password,
       },
