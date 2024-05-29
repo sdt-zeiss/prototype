@@ -74,7 +74,7 @@ You can then run the following command to run the Docker image:
 docker run -p 3000:3000 prototype
 ```
 
-To deploy, simply push to the main branch. The app will be automatically deployed and available at [https://prototype.sliplane.app](https://prototype.sliplane.app).
+To deploy, simply push to the main branch. The app will be automatically deployed and available at [https://insightsout.sliplane.app](https://insightsout.sliplane.app).
 
 ## Architecture
 
