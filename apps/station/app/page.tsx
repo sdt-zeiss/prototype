@@ -2,6 +2,7 @@
 import { MoveRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getState } from "./content/actions";
 
 const leftEye = [
   {
@@ -222,7 +223,7 @@ export default function Page() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      /*
+      try {
         fetch("http://localhost:8000/quadrant")
           .then((res) => res.json())
           .then((data: { quadrant: number }) => {
@@ -232,17 +233,41 @@ export default function Page() {
               [...pupilLeft, ...pupilRight].map((pos) => transformation(pos)),
             );
           });
-          */
+      } catch (error) {
+        console.error(error);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
+  const [mustWait, setMustWait] = useState(false);
+
   return (
     <div
       className="grid-cols-40 grid-rows-24 grid h-screen w-screen items-center justify-center bg-black"
-      onClick={() => {
-        router.push("/content");
+      onClick={async () => {
+        if (mustWait) {
+          return;
+        }
+        const res = await fetch("http://localhost:8000/ready", {
+          method: "POST",
+        });
+
+        const json = await res.json();
+        if (json.ready) {
+          router.push("/content");
+        } else {
+          setMustWait(true);
+
+          const interval = setInterval(async () => {
+            const state = await getState();
+            if (state === "recording") {
+              router.push("/content");
+              clearInterval(interval);
+            }
+          }, 1000);
+        }
       }}
     >
       {positions.map((pos, index) => (
@@ -267,7 +292,12 @@ export default function Page() {
         />
       ))}
       <div className="absolute bottom-8 flex w-screen animate-pulse flex-row items-center justify-center gap-4 text-center align-middle font-mono text-4xl font-bold text-white">
-        Touch anywhere to get started <MoveRightIcon className="h-8 w-8" />
+        {mustWait ? "Waiting for your partner to start..." : (
+          <>
+            Touch anywhere to get started
+            <MoveRightIcon className="h-8 w-8" />
+          </>
+        )}
       </div>
     </div>
   );
