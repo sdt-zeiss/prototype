@@ -41,7 +41,13 @@ export default function AvatarMenu({ username }: { username: string }) {
           <DropdownMenuItem onClick={() => setIsSettingsOpen(true)}>
             Settings
           </DropdownMenuItem>
-          <DropdownMenuItem>Documentation</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              window.location.href = "/chat";
+            }}
+          >
+            Chat
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
