@@ -6,7 +6,7 @@ import Link from "next/link";
 async function createAnonymousUser() {
   const randomAnimal = randomAnimalName();
   const slug = randomAnimal.toLowerCase().replaceAll(" ", "-");
-  const email = `anonymous-${slug}@prototype.sliplane.app`;
+  const email = `anonymous-${slug}@insightsout.sliplane.app`;
 
   const password = generateRandomPassword();
 
@@ -25,7 +25,7 @@ function generateRandomPassword() {
 
 export default async function Page() {
   const user = await createAnonymousUser();
-  const qrCode = `https://prototype.sliplane.app/auth/signin?email=${user.email}&token=${user.password}&signup=true`;
+  const qrCode = `https://insightsout.sliplane.app/auth/signin?email=${user.email}&token=${user.password}&signup=true`;
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-8 bg-black">
       <div className="flex w-screen flex-row items-center justify-center gap-4 text-center align-middle font-mono text-xl font-bold text-white">
