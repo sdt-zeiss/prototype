@@ -103,7 +103,7 @@ export default function OnboardingDialog({
                               </div>
                               <div className="flex flex-row items-center justify-start gap-4">
                                 <RadioGroupItem value={"25-34"} id="r2" />
-                                <label htmlFor="r2">35-44</label>
+                                <label htmlFor="r2">25-34</label>
                               </div>
                               <div className="flex flex-row items-center justify-start gap-4">
                                 <RadioGroupItem value={"35-44"} id="r3" />

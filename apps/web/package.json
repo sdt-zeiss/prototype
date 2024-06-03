@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",
+    "@headlessui/react": "^2.0.4",
     "@hookform/resolvers": "^3.3.4",
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.3",
@@ -28,10 +29,10 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.51.4",
     "recharts": "^2.12.7",
+    "s3": "workspace:*",
     "sharp": "^0.33.4",
     "sonner": "^1.4.41",
     "three": "^0.164.1",
-    "s3": "workspace:*",
     "ui": "workspace:*",
     "zod": "^3.23.7"
   },
