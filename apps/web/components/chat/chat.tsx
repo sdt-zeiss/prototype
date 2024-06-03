@@ -1,3 +1,4 @@
+"use client";
 import { BotIcon, CornerDownLeft, Mic } from "lucide-react";
 import { Badge } from "@ui/components/badge";
 import { Button } from "@ui/components/button";
@@ -11,8 +12,53 @@ import {
 import { Message, messages } from "./data";
 import clsx from "clsx";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Chat() {
+
+  const [messages, setMessages] = useState([
+    { id: 1, from: "Bot", content: "Hello! I'm here to assist you with any questions you have regarding the discussions held at InsightsOut. How can I help you today?" }
+  ]);
+  const [input, setInput] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!input.trim()) return;
+ 
+    const userMessage = { id: Date.now(), from: "User", content: input };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+
+    setInput("");
+
+    const chatEndpoint = "https://prototype-ai.sliplane.app/ask";
+
+    try {
+      const response = await fetch(chatEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: input })
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      const botMessage = { id: Date.now() + 1, from: "Bot", content: data.answer };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+    } catch (error) {
+      console.error("Error fetching response:", error);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      handleSubmit(event);
+    }
+  };
+
   return (
     <div className="bg-muted/50 relative flex h-full max-h-[90%] min-h-[50vh] flex-col rounded-xl p-4 lg:col-span-2">
       <Badge variant="outline" className="absolute right-3 top-3">
@@ -24,7 +70,7 @@ export default function Chat() {
           <MessageComponent key={message.id} message={message} />
         ))}
       </div>
-      <form className="bg-background focus-within:ring-ring relative overflow-hidden rounded-lg border focus-within:ring-1">
+      <form className="bg-background focus-within:ring-ring relative overflow-hidden rounded-lg border focus-within:ring-1" onSubmit={handleSubmit}>
         <Label htmlFor="message" className="sr-only">
           Message
         </Label>
@@ -32,6 +78,10 @@ export default function Chat() {
           id="message"
           placeholder="Type your message here..."
           className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
+          value={input}
+          // onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <div className="flex items-center p-3 pt-0">
           <Tooltip>
