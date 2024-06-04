@@ -9,23 +9,31 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@ui/components/tooltip";
-import { Message, messages } from "./data";
+import { Message } from "./data";
 import clsx from "clsx";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function Chat() {
-
-  const [messages, setMessages] = useState([
-    { id: 1, from: "Bot", content: "Hello! I'm here to assist you with any questions you have regarding the discussions held at InsightsOut. How can I help you today?" }
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      from: "System",
+      content:
+        "Hello! I'm here to assist you with any questions you have regarding the discussions held at InsightsOut. How can I help you today?",
+    },
   ]);
   const [input, setInput] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!input.trim()) return;
- 
-    const userMessage = { id: Date.now(), from: "User", content: input };
+
+    const userMessage: Message = {
+      id: Date.now(),
+      from: "User",
+      content: input,
+    };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
     setInput("");
@@ -36,9 +44,9 @@ export default function Chat() {
       const response = await fetch(chatEndpoint, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ question: input })
+        body: JSON.stringify({ question: input }),
       });
 
       if (!response.ok) {
@@ -46,7 +54,11 @@ export default function Chat() {
       }
 
       const data = await response.json();
-      const botMessage = { id: Date.now() + 1, from: "Bot", content: data.answer };
+      const botMessage: Message = {
+        id: Date.now() + 1,
+        from: "System",
+        content: data.answer,
+      };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error("Error fetching response:", error);
@@ -70,7 +82,10 @@ export default function Chat() {
           <MessageComponent key={message.id} message={message} />
         ))}
       </div>
-      <form className="bg-background focus-within:ring-ring relative overflow-hidden rounded-lg border focus-within:ring-1" onSubmit={handleSubmit}>
+      <form
+        className="bg-background focus-within:ring-ring relative overflow-hidden rounded-lg border focus-within:ring-1"
+        onSubmit={handleSubmit}
+      >
         <Label htmlFor="message" className="sr-only">
           Message
         </Label>
