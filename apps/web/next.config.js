@@ -13,7 +13,7 @@ module.exports = {
     return [
       {
         source: "/feedback",
-        destination: "/home?post=54342cc3-2c5a-464e-901e-d696ac0ba722",
+        destination: "/home?post=clx0m1ziw0005pd0192nbbut8",
         permanent: true,
       },
     ];
