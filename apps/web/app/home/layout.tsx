@@ -21,7 +21,7 @@ export default function HomeLayout({
         <div className="flex flex-col">
           <NavigationBar
             user={session?.user}
-            title="How to make decisions in an uncertain environment?"
+            title="Future of AI in Design and Innovation"
           />
           <main className="">{children}</main>
         </div>
