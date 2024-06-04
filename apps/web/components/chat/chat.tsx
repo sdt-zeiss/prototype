@@ -1,14 +1,9 @@
 "use client";
-import { BotIcon, CornerDownLeft, Mic } from "lucide-react";
+import { BotIcon, SendHorizonal } from "lucide-react";
 import { Badge } from "@ui/components/badge";
 import { Button } from "@ui/components/button";
 import { Label } from "@ui/components/label";
 import { Textarea } from "@ui/components/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@ui/components/tooltip";
 import { Message } from "./data";
 import clsx from "clsx";
 import Image from "next/image";
@@ -72,48 +67,40 @@ export default function Chat() {
   };
 
   return (
-    <div className="bg-muted/50 relative flex h-full max-h-[90%] min-h-[50vh] flex-col rounded-xl p-4 lg:col-span-2">
-      <Badge variant="outline" className="absolute right-3 top-3">
-        AI generated
-      </Badge>
+    <div>
+      <div className="bg-muted/50 mb-[74px] flex h-full min-h-[50vh] flex-col gap-2 rounded-xl p-4 lg:col-span-2">
+        <Badge variant="outline" className="ml-auto">
+          AI generated
+        </Badge>
 
-      <div className="max-h-full flex-1 overflow-y-auto">
         {messages.map((message) => (
           <MessageComponent key={message.id} message={message} />
         ))}
       </div>
-      <form
-        className="bg-background focus-within:ring-ring relative overflow-hidden rounded-lg border focus-within:ring-1"
-        onSubmit={handleSubmit}
-      >
-        <Label htmlFor="message" className="sr-only">
-          Message
-        </Label>
-        <Textarea
-          id="message"
-          placeholder="Type your message here..."
-          className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
-          value={input}
-          // onChange={(e) => setInput(e.target.value)}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-        <div className="flex items-center p-3 pt-0">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Mic className="size-4" />
-                <span className="sr-only">Use Microphone</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">Use Microphone</TooltipContent>
-          </Tooltip>
-          <Button type="submit" size="sm" className="ml-auto gap-1.5">
-            Send Message
-            <CornerDownLeft className="size-3.5" />
-          </Button>
-        </div>
-      </form>
+      <div className="fixed bottom-2 right-4 left-4 h-[66px]">
+        <form
+          className="bg-background focus-within:ring-ring flex w-full flex-grow-0 overflow-hidden rounded-lg border shadow-md focus-within:ring-1"
+          onSubmit={handleSubmit}
+        >
+          <Label htmlFor="message" className="sr-only">
+            Message
+          </Label>
+          <Textarea
+            id="message"
+            placeholder="Type your message here..."
+            className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
+            value={input}
+            // onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <div className="flex items-center p-3 pt-0">
+            <Button type="submit" size="icon" className="ml-auto gap-1.5">
+              <SendHorizonal />
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
