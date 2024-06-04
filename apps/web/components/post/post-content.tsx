@@ -108,11 +108,12 @@ export default function PostContent({
           <div className="flex flex-row text-base font-normal lg:flex-row">
             <div className="flex flex-row items-center gap-x-2">
               {post.likes.length}
-              <MessageCircle size="20" />{" "}
+              <ThumbsUp size="20" />{" "}
             </div>
             <span className="mx-2">•</span>
             <div className="flex flex-row items-center gap-x-2">
-              {post.comments ? post.comments.length : 0} <ThumbsUp size="20" />
+              {post.comments ? post.comments.length : 0}{" "}
+              <MessageCircle size="20" />
             </div>
           </div>
         )}
