@@ -27,6 +27,7 @@ export default function PostCard({
           deleteOwnPost={deleteOwnPost}
           setDialogOpen={setDialogOpen}
           toggleOwnLike={toggleOwnLike}
+          truncateContent={true}
         />
       </div>
     </DialogTrigger>

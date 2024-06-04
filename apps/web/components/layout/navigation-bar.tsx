@@ -25,7 +25,7 @@ export default function NavigationBar({
 
   return (
     <header className="sticky top-0 z-10 w-full border-b bg-white">
-      <nav className="mx-auto flex h-16 max-w-7xl flex-row items-center justify-around p-6 lg:gap-x-12 lg:px-8">
+      <nav className="mx-auto flex h-16 max-w-7xl flex-row items-center justify-between p-6 lg:gap-x-12 lg:px-8">
         <span
           onClick={() => (window.location.href = "/home")}
           className="cursor-pointer text-2xl font-bold lg:justify-start"
@@ -45,12 +45,14 @@ export default function NavigationBar({
           )}
         </div>
       </nav>
-      <nav className="mx-auto flex max-w-7xl flex-row items-center justify-between p-6 lg:gap-x-12 lg:px-8">
+      <nav className="mx-auto flex max-w-7xl flex-col items-center justify-between p-6 md:flex-row lg:gap-x-12 lg:px-8">
         <span className="text-xl font-bold lg:justify-start">{title}</span>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
-              <span className="text-md text-base font-medium">Create Post</span>
+            <Button className="mt-2 w-full md:mt-0 md:w-fit">
+              <span className="text-md text-base font-medium ">
+                Create Post
+              </span>
             </Button>
           </DialogTrigger>
 

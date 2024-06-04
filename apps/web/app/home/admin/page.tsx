@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Post } from "@/app/home/page";
 import { getProfile, getUnreviewedPosts, reviewPost } from "@/lib/actions";
@@ -45,40 +44,35 @@ export default function Page() {
 
     setIsUploading(true); // Disable the button
 
-    const response = await fetch(endpoint, {
-      method: "POST",
-      body: formData,
-    });
-
     try {
-        const response = await fetch(endpoint, {
-          method: "POST",
-          body: formData,
-        });
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: formData,
+      });
 
-        if (response.ok) {
-          const result = await response.json();
-          toast({
-            title: "Upload successful",
-            description: "Your file has been uploaded successfully",
-          });
-          console.log(result); // Handle the response data
-        } else {
-          const errorData = await response.json();
-          toast({
-            title: "Upload failed",
-            description: errorData.error || "Your file could not be uploaded",
-          });
-        }
-      } catch (error) {
+      if (response.ok) {
+        const result = await response.json();
+        toast({
+          title: "Upload successful",
+          description: "Your file has been uploaded successfully",
+        });
+        console.log(result); // Handle the response data
+      } else {
+        const errorData = await response.json();
         toast({
           title: "Upload failed",
-          description: "An error occurred while uploading the file",
+          description: errorData.error || "Your file could not be uploaded",
         });
-        console.error("Error uploading file:", error);
-      } finally {
-        setIsUploading(false); // Re-enable the button
       }
+    } catch (error) {
+      toast({
+        title: "Upload failed",
+        description: "An error occurred while uploading the file",
+      });
+      console.error("Error uploading file:", error);
+    } finally {
+      setIsUploading(false); // Re-enable the button
+    }
   };
 
   const handleFileChange = (event: any) => {
@@ -93,7 +87,14 @@ export default function Page() {
     }
 
     // Constrain filetypes to be one of the following
-    const allowedTypes = ["audio/mp3", "audio/mpeg", "audio/wav", "audio/ogg", "video/mp4", "video/webm"];
+    const allowedTypes = [
+      "audio/mp3",
+      "audio/mpeg",
+      "audio/wav",
+      "audio/ogg",
+      "video/mp4",
+      "video/webm",
+    ];
     if (!allowedTypes.includes(selectedFile.type)) {
       toast({
         title: "Invalid file type",
@@ -155,7 +156,9 @@ export default function Page() {
               </label>
             </div>
             {file && <span>{file.name}</span>}
-            <Button type="submit" disabled={isUploading}>Upload</Button>
+            <Button type="submit" disabled={isUploading}>
+              Upload
+            </Button>
           </form>
         </div>
       </div>
@@ -174,6 +177,7 @@ export default function Page() {
                 deleteOwnPost={undefined}
                 setDialogOpen={undefined}
                 toggleOwnLike={undefined}
+                truncateContent={true}
               />
               <div className="flex flex-row items-center justify-between gap-4">
                 <Button
