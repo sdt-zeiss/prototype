@@ -64,21 +64,22 @@ export default function PostDialog({
     <DialogPortal>
       <DialogOverlay />
       <DialogContent>
-        <motion.div className="flex flex-col justify-start">
+        <motion.div className="flex flex-col justify-start overflow-y-auto overflow-x-visible">
           <PostContent
             post={post}
             type={type}
             deleteOwnPost={deleteOwnPost}
             setDialogOpen={setDialogOpen}
             toggleOwnLike={toggleOwnLike}
+            truncateContent={false}
           />
 
           <div>
-            <div className="mt-3">
+            <div className="mt-1 lg:mt-3">
               {session && session.user && session.user.email && (
                 <Form {...commentForm}>
                   <form
-                    className=" flex flex-row justify-between gap-x-4 pb-4 text-black"
+                    className="flex flex-row justify-between gap-x-4 pb-4 text-black"
                     onSubmit={commentForm.handleSubmit(onSubmitComment)}
                   >
                     <FormField
@@ -103,69 +104,74 @@ export default function PostDialog({
               )}
             </div>
             <span className="text-lg font-bold">Comments</span>
-
-            <div className="flex max-h-80 flex-col divide-y overflow-y-auto">
-              <AnimatePresence>
-                {comments &&
-                  comments.map((comment) => (
+            <div className="max-h-fit">
+              <div className="flex max-h-[20vh] flex-col divide-y overflow-y-auto">
+                <AnimatePresence>
+                  {comments &&
+                    comments.map((comment) => (
+                      <motion.div
+                        className="w-full"
+                        key={comment.id}
+                        layoutId={comment.id}
+                        layout
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="flex flex-row items-start justify-between">
+                          <div className="flex flex-col p-2 text-base font-normal lg:p-4">
+                            <span className="font-bold">
+                              {comment.author.email.split("@")[0]}
+                            </span>
+                            <span className="text-sm font-light">
+                              {comment.createdAt.toLocaleString()}
+                            </span>
+                            <span>{comment.content}</span>
+                          </div>
+                          {session &&
+                            session.user &&
+                            comment.author.email === session.user.email && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="bg-muted mt-5 mr-5 rounded-lg"
+                                aria-label="Delete Post"
+                                onClick={async () => {
+                                  const result = await deleteComment(
+                                    comment.id,
+                                  );
+                                  if (result) {
+                                    setComments(
+                                      comments.filter(
+                                        (c) => c.id !== comment.id,
+                                      ),
+                                    );
+                                  }
+                                }}
+                              >
+                                <Trash className="size-5" />
+                              </Button>
+                            )}
+                        </div>
+                      </motion.div>
+                    ))}
+                  {comments && comments.length === 0 && (
                     <motion.div
                       className="w-full"
-                      key={comment.id}
-                      layoutId={comment.id}
+                      key={0}
+                      layoutId={"1"}
                       layout
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <div className="flex flex-row items-start justify-between">
-                        <div className=" flex flex-col p-5 text-base font-normal">
-                          <span className="font-bold">
-                            {comment.author.email}
-                          </span>
-                          <span className="font-light">
-                            Created at {comment.createdAt.toLocaleString()}
-                          </span>
-                          <span>{comment.content}</span>
-                        </div>
-                        {session &&
-                          session.user &&
-                          comment.author.email === session.user.email && (
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="bg-muted mt-5 mr-5 rounded-lg"
-                              aria-label="Delete Post"
-                              onClick={async () => {
-                                const result = await deleteComment(comment.id);
-                                if (result) {
-                                  setComments(
-                                    comments.filter((c) => c.id !== comment.id),
-                                  );
-                                }
-                              }}
-                            >
-                              <Trash className="size-5" />
-                            </Button>
-                          )}
-                      </div>
+                      No comments yet
                     </motion.div>
-                  ))}
-                {comments && comments.length === 0 && (
-                  <motion.div
-                    className="w-full"
-                    key={0}
-                    layoutId={"1"}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    No comments yet
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
         </motion.div>

@@ -10,6 +10,7 @@ import { PostContext } from "@/contexts/PostContext";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import OnboardingDialog from "@/components/onboarding/onboarding-dialog";
+import { Icons } from "@ui/components/ui/icons";
 
 export type Comment = {
   content: string;
@@ -37,6 +38,7 @@ export default function Page() {
   const [openedPost, setOpenedPost] = useState<Post | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isOnboarding, setIsOnboarding] = useState<boolean>(false);
+  const [isInitialLoadCompleted, setIsInitialLoadCompleted] = useState(false);
   const { data: session } = useSession();
 
   const { posts, setPosts } = useContext(PostContext);
@@ -45,11 +47,20 @@ export default function Page() {
 
   useEffect(() => {
     setIsOnboarding(searchParams.get("onboarding") === "true");
-  }, [searchParams]);
+    if (searchParams.get("post") && isInitialLoadCompleted) {
+      setOpenedPost(
+        posts.find(
+          (post) => post.id === searchParams.get("post").replace("/", ""),
+        ),
+      );
+      setDialogOpen(true);
+    }
+  }, [searchParams, isInitialLoadCompleted]);
 
   useEffect(() => {
     getPostsWithComments().then((posts) => {
       setPosts(posts);
+      setIsInitialLoadCompleted(true);
     });
   }, [setPosts]);
 
@@ -77,6 +88,14 @@ export default function Page() {
       return true;
     };
   };
+
+  if (!isInitialLoadCompleted) {
+    return (
+      <div className="flex flex-col items-center justify-center pt-20 ">
+        <Icons.spinner className="h-12 w-12 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center text-2xl font-bold">
