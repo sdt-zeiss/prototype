@@ -43,7 +43,7 @@ export default async function ChatInterface() {
         </Drawer>
         <AvatarMenu username={session.user.email} />
       </header>
-      <main className="grid flex-1 gap-4 overflow-auto md:grid-cols-2 md:p-4 lg:grid-cols-3">
+      <main className="grid flex-1 gap-4 md:grid-cols-2 md:p-4 lg:grid-cols-3">
         <div className="relative hidden flex-col items-start gap-8 md:flex">
           <Settings />
         </div>
