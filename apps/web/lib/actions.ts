@@ -263,8 +263,9 @@ export async function createComment(
 ) {
   try {
     const session = await auth();
+    let noSession = false;
     if (!session || !session.user || !session.user.email) {
-      throw new Error("Unauthorized");
+      noSession = true;
     }
 
     const comment = await prisma.comment.create({
@@ -277,7 +278,9 @@ export async function createComment(
         },
         author: {
           connect: {
-            email: session.user.email,
+            email: noSession
+              ? "Visitor@prototype.sliplane.app"
+              : session.user.email,
           },
         },
       },

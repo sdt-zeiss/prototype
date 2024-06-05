@@ -51,6 +51,13 @@ export default function PostDialog({
 
   const onSubmitComment = async (data: z.infer<typeof commentSchema>) => {
     const comment = await createComment(post.id, data);
+    const vectorEndpoint = "https://prototype-ai.sliplane.app/add-vector";
+    fetch(vectorEndpoint, {
+      method: "POST",
+      body: JSON.stringify({
+        content: comment.content,
+      }),
+    });
     setComments([...comments, comment]);
     commentForm.reset();
   };
@@ -76,7 +83,8 @@ export default function PostDialog({
 
           <div>
             <div className="mt-1 lg:mt-3">
-              {session && session.user && session.user.email && (
+              {((session && session.user && session.user.email) ||
+                (post && post.id === "clx0m1ziw0005pd0192nbbut8")) && (
                 <Form {...commentForm}>
                   <form
                     className="flex flex-row justify-between gap-x-4 pb-4 text-black"
