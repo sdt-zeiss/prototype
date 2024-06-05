@@ -51,13 +51,6 @@ export default function PostDialog({
 
   const onSubmitComment = async (data: z.infer<typeof commentSchema>) => {
     const comment = await createComment(post.id, data);
-    const vectorEndpoint = "https://prototype-ai.sliplane.app/add-vector";
-    fetch(vectorEndpoint, {
-      method: "POST",
-      body: JSON.stringify({
-        content: comment.content,
-      }),
-    });
     setComments([...comments, comment]);
     commentForm.reset();
   };
