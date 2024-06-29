@@ -60,7 +60,7 @@ export default function OnboardingDialog({
     setDialogOpen(false);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <DialogPortal>

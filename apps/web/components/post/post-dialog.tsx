@@ -78,31 +78,31 @@ export default function PostDialog({
             <div className="mt-1 lg:mt-3">
               {((session && session.user && session.user.email) ||
                 (post && post.id === "clx0m1ziw0005pd0192nbbut8")) && (
-                <Form {...commentForm}>
-                  <form
-                    className="flex flex-row justify-between gap-x-4 pb-4 text-black"
-                    onSubmit={commentForm.handleSubmit(onSubmitComment)}
-                  >
-                    <FormField
-                      control={commentForm.control}
-                      name="content"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormControl>
-                            <Input
-                              className="w-full"
-                              placeholder=""
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit">Comment</Button>
-                  </form>
-                </Form>
-              )}
+                  <Form {...commentForm}>
+                    <form
+                      className="flex flex-row justify-between gap-x-4 pb-4 text-black"
+                      onSubmit={commentForm.handleSubmit(onSubmitComment)}
+                    >
+                      <FormField
+                        control={commentForm.control}
+                        name="content"
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormControl>
+                              <Input
+                                className="w-full"
+                                placeholder=""
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button type="submit">Comment</Button>
+                    </form>
+                  </Form>
+                )}
             </div>
             <span className="text-lg font-bold">Comments</span>
             <div className="max-h-fit">

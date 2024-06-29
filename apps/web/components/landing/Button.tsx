@@ -26,13 +26,13 @@ const variantStyles = {
 
 type ButtonProps = (
   | {
-      variant?: "solid";
-      color?: keyof typeof variantStyles.solid;
-    }
+    variant?: "solid";
+    color?: keyof typeof variantStyles.solid;
+  }
   | {
-      variant: "outline";
-      color?: keyof typeof variantStyles.outline;
-    }
+    variant: "outline";
+    color?: keyof typeof variantStyles.outline;
+  }
 ) &
   Omit<React.ComponentPropsWithoutRef<typeof Link>, "color">;
 

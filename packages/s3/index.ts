@@ -16,7 +16,7 @@ export const getBuffer = async (key: string) => {
   const object = await s3.getObject(process.env.S3_BUCKET as string, key);
 
   const buffer: Buffer = await new Promise((resolve, reject) => {
-    const buffer = [];
+    const buffer: any[] = [];
     object.on("error", reject);
     object.on("end", () => resolve(Buffer.concat(buffer)));
 

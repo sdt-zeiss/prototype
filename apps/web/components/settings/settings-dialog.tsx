@@ -65,7 +65,7 @@ export default function SettingsDialog({
     setDialogOpen(false);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <DialogPortal>

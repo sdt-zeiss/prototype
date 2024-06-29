@@ -1,4 +1,4 @@
-# ZEISS ZKM Prototype
+# InsightsOut Prototype
 
 ## Features
 
@@ -11,8 +11,7 @@
 - TailwindCSS (Styling)
 - Turborepo (Monorepo)
 - ShadcnUI (Styling)
-- Resend.com (Emails)
-- Render.com (Hosting)
+- Sliplane.io (Hosting)
 
 ## Development
 
@@ -26,7 +25,11 @@ You will then have to create an `.env.local` file in `/apps/web/` and add the fo
 
 ```bash
 DATABASE_URL=...
-AUTH_SECRET=
+AUTH_SECRET=...
+S3_URL=...
+S3_USERNAME=...
+S3_PASSWORD=...
+S3_BUCKET=...
 ```
 
 `AUTH_SECRET` can be any random string. If you are on a unix (macOS, Linux) system, you can run the following command to generate a random string:
@@ -44,8 +47,6 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 `DATABASE_URL` should be the URL to your PostgreSQL database. If you want to use the hosted database, please ping me (Jonas S.) on Slack
 
 Then also create a `.env` file in `/packages/database/prisma` and copy the `DATABASE_URL` from the `.env.local` file.
-
-If you are bored you can figure out how to reduce the number of `.env` files:D
 
 ### Commands
 
@@ -76,16 +77,8 @@ docker run -p 3000:3000 prototype
 
 To deploy, simply push to the main branch. The app will be automatically deployed and available at [https://insightsout.sliplane.app](https://insightsout.sliplane.app).
 
-## Architecture
-
-This is the diagram of the database. You can also find the schema in `/packages/database/schema.prisma`
-
-![](./diagram.png)
-
-## Screenshots
-
-You can find more screenshots in the screenshots folder.
-
 ## License
 
-No License. Please do not use this project for commercial purposes without permission :)
+MIT License, see [LICENSE](./LICENSE)
+
+Copyright (c) 2024 Jonas Scholz, Jonas Baltruschat, Lucas Reisener, Ashish Patel, Jan Wohlfarth, Felicitas Baur, Ala Sahada
