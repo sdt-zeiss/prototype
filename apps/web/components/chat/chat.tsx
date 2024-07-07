@@ -125,7 +125,7 @@ function MessageComponent({ message }: { message: Message }) {
         ) : (
           <BotIcon className="size-4 shrink-0" />
         )}
-        <p>{message.content}</p>
+        <div dangerouslySetInnerHTML={{ __html: message.content }} />
       </div>
     </div>
   );
