@@ -1,25 +1,22 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build", "^db:generate"],
-      "outputs": [".next/**", "!.next/cache/**"],
-      "dotEnv": [".env.local", ".env"]
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "lint": {},
     "dev": {
       "dependsOn": ["^dev", "^db:generate"],
       "cache": false,
-      "persistent": true,
-      "dotEnv": [".env.local"]
+      "persistent": true
     },
     "db:generate": {
       "cache": false
     },
     "db:push": {
-      "cache": false,
-      "dotEnv": [".env.local"]
+      "cache": false
     },
     "db:seed": {
       "cache": false
@@ -31,5 +28,12 @@
       "dependsOn": ["^build", "^db:generate"]
     }
   },
-  "globalEnv": ["DATABASE_URL", "AUTH_SECRET", "S3_URL", "S3_USERNAME", "S3_PASSWORD", "S3_BUCKET"]
+  "globalEnv": [
+    "DATABASE_URL",
+    "AUTH_SECRET",
+    "S3_URL",
+    "S3_USERNAME",
+    "S3_PASSWORD",
+    "S3_BUCKET"
+  ]
 }
